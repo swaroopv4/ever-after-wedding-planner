@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+.venv/
+.streamlit/secrets.toml
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.uv-cache/
+.test-work*/
+.server*.log
+plans/
+*.py[cod]
