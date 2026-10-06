@@ -1,0 +1,31 @@
+name: Application checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install uv
+        run: python -m pip install uv==0.12.23
+      - name: Install locked dependencies
+        run: uv sync --frozen --group dev
+      - name: Lint
+        run: uv run --frozen ruff check .
+      - name: Check formatting
+        run: uv run --frozen ruff format --check .
+      - name: Offline tests
+        run: uv run --frozen pytest -q
+      - name: CLI preview
+        run: uv run --frozen python main.py --preview --output plans/sample.md
